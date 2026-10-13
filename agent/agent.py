@@ -10,6 +10,8 @@ import argparse
 import json
 import re
 
+from langsmith import traceable
+
 try:
     from dotenv import load_dotenv
     load_dotenv()  # lets @traceable pick up LANGSMITH_* from .env
@@ -59,11 +61,13 @@ class CustomerServiceAgent:
         # (get_order_status, lookup_policy, issue_refund, escalate_to_human).
 
     # -- tools ------------------------------------------------------------
+    @traceable
     def get_order_status(self, order_id: str) -> dict:
         """Look up a Pronto order by ID (e.g. PRN-10421)."""
         # TODO (later weeks): replace canned data with a real lookup.
         return DEMO_ORDERS.get(order_id, {"error": f"unknown order {order_id}"})
 
+    @traceable
     def lookup_policy(self, topic: str) -> list:
         """Keyword search over Pronto's policy snippets."""
         words = [w.strip("?.,!").lower() for w in topic.split()]
@@ -73,6 +77,7 @@ class CustomerServiceAgent:
                 hits.append(p["text"])
         return hits
 
+    @traceable
     def issue_refund(self, order_id: str, amount: float, reason: str) -> dict:
         """Issue a refund. Amounts over $50 are NEVER processed autonomously —
         they are escalated to a human, per Pronto policy."""
@@ -84,12 +89,14 @@ class CustomerServiceAgent:
         return {"status": "approved", "order_id": order_id,
                 "amount": round(amount, 2), "reason": reason}
 
+    @traceable
     def escalate_to_human(self, reason: str) -> dict:
         """Hand off to a human specialist. Mandatory for legal threats,
         safety/health issues, and other customers' data."""
         return {"escalated": True, "reason": reason}
 
     # -- main loop ---------------------------------------------------------
+    @traceable
     def run(self, user_message: str) -> str:
         """Handle one user message. Returns the agent's reply."""
         # TODO (Week 1, Assignment 1): add @traceable here so every run
