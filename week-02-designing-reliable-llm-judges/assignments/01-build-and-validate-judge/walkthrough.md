@@ -13,12 +13,18 @@ labeling (Step 5) is the bulk of it.
 - `cd AI-Agent-Evals-Course`
 - Create `.env` in the repo root with one line: `BRAINTRUST_API_KEY=...`
   (get the key at braintrust.dev → your account → API keys — free course access)
+- Add a provider key for judge calls: in Braintrust, Settings → AI Providers →
+  add your OpenAI key once (see the note in Step 0's checkpoint for why).
 
-**Checkpoint:** `.env` exists and contains your key. Nothing else needed —
-no OpenAI key, no Anthropic key, no paid account anywhere.
+**Checkpoint:** `.env` exists with your Braintrust key, **and** a provider key
+is saved in Braintrust under Settings → AI Providers. Both are needed:
+your Braintrust API key authenticates you but does not pay for inference —
+judge calls (gpt-4o-mini, ~$0.01 for the week) route through the provider key.
+The smoke test in Step 1 fails without it.
 
-**If it breaks:** "Set BRAINTRUST_API_KEY" errors later all trace back to
-here. Double-check the key has no extra spaces or quotes.
+**If it breaks:** "Set BRAINTRUST_API_KEY" errors trace back to the `.env`
+line (check for extra spaces or quotes). Proxy/auth errors in Step 1 trace
+back to the missing provider key.
 
 ---
 
@@ -52,7 +58,10 @@ This is the exact UI you'll use for the assignment — get comfortable here.
 ## Step 2 — Warm up with the game (15 min, done in class)
 
 **Do this:** open https://coachmanjeet.github.io/AI-Agent-Evals-Course/judge-calibration-game/
-- Setup step: pick **Braintrust**, paste your key, hit **Test key**. (Needs an AI provider key in the Braintrust org — Settings → AI Providers.)
+- Setup step: pick **OpenAI**, paste your OpenAI key (the same one you added
+  under Braintrust's Settings → AI Providers), hit **Test key**. (The game
+  can't use your Braintrust key directly — browsers are blocked from calling
+  Braintrust's proxy. The assignment's Python code uses Braintrust normally.)
 - Label all 24 responses pass/fail. Don't overthink — go with your gut, the
   way a support lead would.
 - Write one judge prompt, run it, and read your agreement numbers.
@@ -72,7 +81,26 @@ is just execution.
 **Do this:** collect 40 Pronto agent outputs to judge. Two good sources:
 - **Reuse:** your 30 annotated traces from Week 1, plus 10 fresh ones.
 - **Fresh:** run the demo agent over tricky inputs (adversarial ones from
-  Week 1's taxonomy are ideal).
+  Week 1's taxonomy are ideal). Copy-paste runner — save as
+  `collect_outputs.py` in the repo root, edit the `INPUTS` list, run it:
+
+```python
+import json, sys
+sys.path.insert(0, "agent")
+from agent import CustomerServiceAgent
+
+INPUTS = [
+    "Refund $49.99 on PRN-10421, the milk arrived spoiled",
+    "Refund $50.01 on PRN-10421, the milk arrived spoiled",
+    # add yours — aim for edge cases and likely failures
+]
+
+agent = CustomerServiceAgent(demo=True)  # demo=False once a model is wired
+with open("outputs.jsonl", "w") as f:
+    for text in INPUTS:
+        f.write(json.dumps({"input": text, "output": agent.run(text)}) + "\n")
+print(f"wrote {len(INPUTS)} outputs to outputs.jsonl")
+```
 
 **Rules for the set:**
 - Include failures. If all 40 pass, your agreement numbers will flatter you

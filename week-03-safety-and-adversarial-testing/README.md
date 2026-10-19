@@ -4,6 +4,37 @@ Adversarial eval is a different discipline from quality eval: you're not
 asking "does it work?" but "can someone make it misbehave?" — then building
 the guardrails that catch it.
 
+## The target
+
+From Week 3 on, you attack the REAL loop: `agent/pronto_agent.py`
+(run it as `python -m agent.pronto_agent --ask "..."` from the repo root).
+`agent/agent.py` was the Week 1 skeleton — rule-based, canned responses.
+A skeleton can't be prompt-injected (there's no model to trick), so from
+here the agent under test is model-driven, multi-turn, and genuinely
+attackable. Its traces land in Braintrust (or LangSmith, or nowhere —
+see `agent/README.md`); bring them to your annotation tool of choice.
+
+The agent ships with exactly ONE built-in defense: an
+`ESCALATION_KEYWORDS` pre-check (legal threats, safety issues, other
+customers' data) that escalates to a human. It is deliberately crude.
+Your Week 3 job: measure it (catch rate vs over-block rate), then build
+better ones.
+
+Worked example — run this and watch it over-block:
+
+```bash
+python -m agent.pronto_agent --ask "Where is my wife's order PRN-10422?"
+```
+
+`ESCALATION_KEYWORDS` contains "my wife's", so a fully legitimate request
+gets escalated to a human. That is your baseline over-block rate sitting
+above zero before you write a line of code. Now beat it: your guardrails
+should catch the attacks in Assignment 1 *without* blocking this one.
+
+Model path: with `BRAINTRUST_API_KEY` in `.env` (your Week 2 key — zero
+new setup) the agent talks through Braintrust's AI proxy. `PRONTO_*`
+overrides point it at a local or other model instead.
+
 ## This week's workflow
 
 ```mermaid
@@ -46,3 +77,4 @@ flowchart LR
 - `examples/` — worked examples from the live session (added after the session)
 - `assignments/01-scan-and-triage/` — Promptfoo baseline scan + hand-crafted attacks
 - `assignments/02-build-and-score-guardrails/` — 3 guardrails, scored on catch vs over-block
+- `assignments/03-jev-guardrail-judge/` — Jev-powered guardrail: calibrated decisions + confidence-threshold human routing (draft, pending Manjeet's review)
