@@ -8,7 +8,7 @@ the guardrails that catch it.
 
 From Week 3 on, you attack the REAL loop: `agent/pronto_agent.py`
 (run it as `python -m agent.pronto_agent --ask "..."` from the repo root).
-`agent/agent.py` was the Week 1 skeleton — rule-based, canned responses.
+`agent/agent_skeleton.py` was the Week 1 skeleton — rule-based, canned responses.
 A skeleton can't be prompt-injected (there's no model to trick), so from
 here the agent under test is model-driven, multi-turn, and genuinely
 attackable. Its traces land in Braintrust (or LangSmith, or nowhere —
@@ -72,9 +72,18 @@ flowchart LR
 - Promptfoo docs — red teaming, scans, config: https://promptfoo.dev
 - LangSmith docs: https://docs.langchain.com/langsmith
 
+## Assignments
+
+Each assignment README is the complete assignment document (steps,
+judging rules, acceptance criteria) — this page only links to them:
+
+- [Assignment 1 — Scan and triage](assignments/01-scan-and-triage/README.md) — Promptfoo baseline scan + hand-crafted attacks
+- [Assignment 2 — Build and score guardrails](assignments/02-build-and-score-guardrails/README.md) — 3 guardrails, scored on catch vs over-block
+- [Assignment 3 — Jev guardrail judge](assignments/03-jev-guardrail-judge/README.md) — Jev-powered guardrail: calibrated decisions + probability-threshold human routing
+
 ## In this folder
 
 - `examples/` — worked examples from the live session (added after the session)
 - `assignments/01-scan-and-triage/` — Promptfoo baseline scan + hand-crafted attacks
 - `assignments/02-build-and-score-guardrails/` — 3 guardrails, scored on catch vs over-block
-- `assignments/03-jev-guardrail-judge/` — Jev-powered guardrail: calibrated decisions + confidence-threshold human routing (draft, pending Manjeet's review)
+- `assignments/03-jev-guardrail-judge/` — Jev-powered guardrail: calibrated decisions + probability-threshold human routing

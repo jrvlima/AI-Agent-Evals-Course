@@ -62,6 +62,25 @@ Rules of thumb:
 - GitHub Actions docs — workflows, schedules: https://docs.github.com/actions
 - LangSmith docs — monitoring and automations: https://docs.langchain.com/langsmith
 
+## Setup — your fork + Actions secrets
+
+This week's work happens in a repo you control, with GitHub Actions enabled:
+
+1. Fork (or clone and re-push) this repo and enable Actions on it.
+2. Add the secrets the gate needs — the full list is in Assignment 1's starter checklist (repo Settings → Secrets): model key, LangSmith, Braintrust.
+3. No new accounts: your LangSmith (Week 1) and Braintrust (Week 2) accounts carry over.
+
+## Assignments
+
+Each assignment README is the complete assignment document (steps,
+judging rules, acceptance criteria) — this page only links to them. The
+decision-gates table above (in "Decision gates — from eval numbers to
+product calls") is this week's reference for turning scores into
+ship / no-ship calls.
+
+- [Assignment 1 — Deploy the infrastructure](assignments/01-deploy-the-infrastructure/README.md) — GitHub Actions gates + monitoring + canary
+- [Assignment 2 — Operate and document](assignments/02-operate-and-document/README.md) — flywheel cycle doc, cost-routing recommendation, ownership doc
+
 ## In this folder
 
 - `examples/` — worked examples from the live session (added after the session)
@@ -92,7 +111,7 @@ assignments cover wiring the eval infrastructure:
 ## Beyond text: multimodal and rigor upgrades
 
 Short, teachable additions in
-[`resources/multimodal-evals/`](../../resources/multimodal-evals/) — distilled
+[`resources/multimodal-evals/`](../resources/multimodal-evals/) — distilled
 from production multimodal-eval practice, Pronto-flavored:
 
 - `eval-contracts.md` — organize evals as contracts with kappa-gated deployment

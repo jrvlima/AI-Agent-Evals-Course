@@ -22,13 +22,12 @@ flowchart LR
 - Golden-set schema; criteria-based ground truth
 - Synthetic data generation and validation (and why synthetic labels need checking)
 - Dataset versioning and pinning in LangSmith
-- Benchmark literacy: MMLU, HumanEval, SWE-bench (what they measure, what they don't)
 - Component-wise RAG evaluation: retrieval vs. generation
 - The four RAG scorers (Braintrust): faithfulness, answer relevance, context precision, context recall
 - Groundedness: is the answer supported by the retrieved context?
 - Braintrust experiments: datasets, custom scorer functions, per-scorer means
 - Sample size and margin of error; paired testing
-- Bootstrap confidence intervals; significance testing and p-values
+- Bootstrap confidence intervals; grading on the interval, not a p-value
 - Multiple comparisons and held-out re-testing
 - Repeatable harness design: pinned datasets, one config, reproducible runs
 
@@ -49,6 +48,14 @@ flowchart LR
 1. Sign up at [braintrust.dev](https://www.braintrust.dev) (free tier is plenty for this course).
 2. Create an API key and add it to your `.env`: `BRAINTRUST_API_KEY=<paste your key>`.
 3. `pip install braintrust` in your `.venv`.
+
+## Assignments
+
+Each assignment README is the complete assignment document (steps,
+judging rules, acceptance criteria) — this page only links to them:
+
+- [Assignment 1 — Build and version a dataset](assignments/01-build-and-version-dataset/README.md) — 150+ case golden set, pinned v1
+- [Assignment 2 — Measure and test](assignments/02-measure-and-test/README.md) — Braintrust scorers, groundedness failure, bootstrap test
 
 ## In this folder
 
